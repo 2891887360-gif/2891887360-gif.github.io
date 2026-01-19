@@ -19,7 +19,7 @@
   
 - type: wechat
   icon: "fab fa-weixin"
-  url: "#"  # 暂时用 # 占位
+  url: "#wechat"  # 暂时用 # 占位
 # Uncomment and complete the url below to enable more contact options
 #
 # - type: mastodon
