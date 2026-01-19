@@ -175,4 +175,14 @@ script_includes:
     <!-- .post-tail-bottom -->
   </div>
   <!-- div.post-tail-wrapper -->
+  <!-- 评论区域 -->
+{% if site.comments.active %}
+<div class="post-tail-wrapper text-muted">
+  <div class="post-tail-bottom d-flex justify-content-between align-items-center pb-5">
+    <div class="post-comments">
+      {% include comments/{{ site.comments.active }}. html %}
+    </div>
+  </div>
+</div>
+{% endif %}
 </article>
