@@ -137,7 +137,7 @@ assets:
     # only works if `assets.self_host.enabled` is 'true'
     env: # [development | production]
 custom_js:
-  - wechat-popup.js
+  - wechat-popup.js 
 
 pwa:
   enabled: true # The option for PWA feature (installable)
