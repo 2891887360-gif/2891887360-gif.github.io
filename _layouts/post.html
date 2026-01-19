@@ -178,14 +178,3 @@ script_includes:
    {{ content }}
 </div>
 </article>
-{% if site.comments.active == 'giscus' %}
-<div class="row">
-  <div class="col-12 col-lg-11 col-xl-8">
-    <div class="pl-md-2 pr-md-2">
-      <div id="post-comments" class="mt-5">
-        {% include comments/giscus.html %}
-      </div>
-    </div>
-  </div>
-</div>
-{% endif %}
