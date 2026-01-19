@@ -175,14 +175,13 @@ script_includes:
     <!-- .post-tail-bottom -->
   </div>
   <!-- div.post-tail-wrapper -->
-  <!-- 评论区域 -->
-{% if site.comments.active %}
-<div class="post-tail-wrapper text-muted">
-  <div class="post-tail-bottom d-flex justify-content-between align-items-center pb-5">
-    <div class="post-comments">
-      {% include comments/{{ site.comments.active }}. html %}
-    </div>
-  </div>
+   {{ content }}
+</div>
+
+<!-- 评论区域 -->
+{% if site.comments.active == 'giscus' %}
+<div class="post-comments mt-5">
+  {% include comments/giscus.html %}
 </div>
 {% endif %}
 </article>
