@@ -9,7 +9,7 @@
   url: "https://twitter.com/RollingTheRock"
 - type: email
   icon: "fas fa-envelope"
-  url: "mailto:2891887360@qq.com"
+  url: "mailto:2891887360@qq.com" 
   noblank: true # open link in current tab
 
 - type: rss
