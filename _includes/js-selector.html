@@ -84,5 +84,98 @@
     {% endcase %}
   {% endif %}
 {% endif %}
-<!-- 自定义微信弹窗脚本 -->
-<script src="{{ '/assets/js/wechat-popup.js' | relative_url }}"></script>
+<!-- 微信弹窗功能（内联版本） -->
+<span id="wechat" hidden></span>
+
+<script>
+(function() {
+  'use strict';
+  
+  console.log('[WeChat] 脚本开始加载');
+  
+  function initWeChatPopup() {
+    const wechatLink = document.querySelector('a[href="#wechat"]');
+    
+    if (! wechatLink) {
+      console.warn('[WeChat] 未找到微信链接');
+      return;
+    }
+    
+    console.log('[WeChat] 找到微信链接，准备绑定事件');
+    
+    wechatLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      console.log('[WeChat] 微信图标被点击');
+      
+      // 创建弹窗
+      const modal = document. createElement('div');
+      modal.innerHTML = `
+        <div style="position: fixed; top: 0; left: 0; width:  100%; height: 100%; 
+                    background: rgba(0,0,0,0.85); z-index: 9999; 
+                    display: flex; align-items: center; justify-content: center; 
+                    animation: fadeIn 0.3s;"
+             onclick="this.parentElement.remove()">
+          <div style="background: white; padding: 30px; border-radius: 15px; 
+                      text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+                      animation: slideDown 0.3s;"
+               onclick="event.stopPropagation()">
+            <h3 style="margin:  0 0 20px 0; color: #333;">微信联系我</h3>
+            <img src="/assets/img/wechat-qr.png" 
+                 alt="WeChat QR Code" 
+                 style="width:  250px; height: 250px; border-radius: 10px; display: block; margin: 0 auto;">
+            <p style="margin: 15px 0 20px 0; color: #666;">微信号：RollingTheRock</p>
+            <button onclick="this.closest('div').parentElement.remove()" 
+                    style="padding: 10px 30px; background: #07c160; color: white; 
+                           border: none; border-radius:  5px; cursor: pointer; 
+                           font-size:  14px; transition: background 0.3s;"
+                    onmouseover="this.style.background='#06ad56'"
+                    onmouseout="this.style.background='#07c160'">
+              关闭
+            </button>
+          </div>
+        </div>
+      `;
+      
+      // 添加动画样式
+      const style = document. createElement('style');
+      style.textContent = `
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes slideDown {
+          from { transform: translateY(-50px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+      `;
+      modal.appendChild(style);
+      
+      document.body.appendChild(modal);
+      document.body.style.overflow = 'hidden'; // ��止背景滚动
+      
+      // ESC 键关闭
+      const handleEsc = function(e) {
+        if (e.key === 'Escape') {
+          modal.remove();
+          document.body.style.overflow = '';
+          document.removeEventListener('keydown', handleEsc);
+        }
+      };
+      document.addEventListener('keydown', handleEsc);
+      
+      console.log('[WeChat] 弹窗已显示');
+    });
+    
+    console.log('[WeChat] 事件绑定完成');
+  }
+  
+  // DOM 加载完成后初始化
+  if (document. readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initWeChatPopup);
+  } else {
+    initWeChatPopup();
+  }
+})();
+</script>
