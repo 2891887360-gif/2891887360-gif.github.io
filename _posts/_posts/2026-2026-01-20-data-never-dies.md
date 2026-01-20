@@ -1,5 +1,4 @@
 ---
-layout: post
 title:  "数据不会死，它只是沉默"
 date: 2026-01-21 23:47:00 +0800
 categories:  [思考, 技术]
