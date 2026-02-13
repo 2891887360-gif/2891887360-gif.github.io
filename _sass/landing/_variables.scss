@@ -100,12 +100,19 @@ $space-40: 10rem;               // 160px
 $space-48: 12rem;               // 192px
 
 // ----------------------------------------
-// Layout - 更窄的内容宽度
+// Layout - 多层级内容宽度系统
 // ----------------------------------------
 
-$content-width: 680px;          // 阅读内容最佳宽度
-$wide-width: 1100px;            // 宽屏内容
-$container-max-width: $wide-width;
+// 页面类型宽度规范
+$width-article: 680px;          // 文章正文、About 页面 - 最佳阅读宽度
+$width-medium: 900px;           // 项目详情、设计详情
+$width-wide: 1100px;            // 首页、博客列表、项目列表
+$width-full: 1400px;            // 全宽图片突破
+
+// 向后兼容的别名
+$content-width: $width-article;
+$wide-width: $width-wide;
+$container-max-width: $width-wide;
 
 $container-padding-x: $space-8;         // 容器水平内边距
 $container-padding-x-sm: $space-5;      // 小屏容器内边距
@@ -227,10 +234,10 @@ $z-tooltip: 700;
   }
 }
 
-// 内容宽度容器
+// 内容宽度容器 (向后兼容)
 @mixin content-container {
   width: 100%;
-  max-width: $content-width;
+  max-width: $width-article;
   margin-left: auto;
   margin-right: auto;
   padding-left: $container-padding-x-sm;
@@ -239,6 +246,63 @@ $z-tooltip: 700;
   @include media-md {
     padding-left: 0;
     padding-right: 0;
+  }
+}
+
+// 多层级容器 Mixins
+@mixin container-article {
+  width: 100%;
+  max-width: $width-article;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: $container-padding-x-sm;
+  padding-right: $container-padding-x-sm;
+
+  @include media-md {
+    padding-left: $container-padding-x;
+    padding-right: $container-padding-x;
+  }
+}
+
+@mixin container-medium {
+  width: 100%;
+  max-width: $width-medium;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: $container-padding-x-sm;
+  padding-right: $container-padding-x-sm;
+
+  @include media-md {
+    padding-left: $container-padding-x;
+    padding-right: $container-padding-x;
+  }
+}
+
+@mixin container-wide {
+  width: 100%;
+  max-width: $width-wide;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: $container-padding-x-sm;
+  padding-right: $container-padding-x-sm;
+
+  @include media-md {
+    padding-left: $container-padding-x;
+    padding-right: $container-padding-x;
+  }
+}
+
+@mixin container-full {
+  width: 100%;
+  max-width: $width-full;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: $container-padding-x-sm;
+  padding-right: $container-padding-x-sm;
+
+  @include media-md {
+    padding-left: $container-padding-x;
+    padding-right: $container-padding-x;
   }
 }
 

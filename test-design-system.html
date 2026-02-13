@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>设计系统测试 - Every.to 风格</title>
+
+  <!-- Google Fonts - Playfair Display & Noto Serif SC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================
+       Every.to Style Design System - Test
+       ============================================ */
+
+    /* CSS Custom Properties */
+    :root {
+      /* Colors - Light Mode */
+      --bg-primary: #FFFFFF;
+      --bg-secondary: #FFFFFF;
+      --bg-tertiary: #F7F7F7;
+      --text-primary: #1A1A1A;
+      --text-secondary: #666666;
+      --text-muted: #999999;
+      --accent: #1A1A1A;
+      --border: #E5E5E5;
+
+      /* Typography */
+      --font-serif: 'Playfair Display', 'Noto Serif SC', Georgia, serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+      /* Font Sizes (18px base) */
+      --text-xs: 0.75rem;
+      --text-sm: 0.875rem;
+      --text-base: 1.125rem;
+      --text-lg: 1.25rem;
+      --text-xl: 1.5rem;
+      --text-2xl: 2rem;
+      --text-3xl: 2.5rem;
+      --text-4xl: 3.5rem;
+      --text-5xl: 4rem;
+
+      /* Line Height */
+      --leading-tight: 1.3;
+      --leading-normal: 1.7;
+      --leading-relaxed: 1.9;
+
+      /* Spacing */
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-4: 1rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --space-12: 3rem;
+      --space-16: 4rem;
+      --space-20: 5rem;
+
+      /* Layout */
+      --content-width: 680px;
+      --wide-width: 1100px;
+    }
+
+    /* Dark Mode */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-primary: #0A0A0A;
+        --bg-secondary: #0A0A0A;
+        --bg-tertiary: #141414;
+        --text-primary: #EEEEEE;
+        --text-secondary: #A3A3A3;
+        --text-muted: #737373;
+        --accent: #FFFFFF;
+        --border: #292929;
+      }
+    }
+
+    /* Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: var(--text-base);
+      line-height: var(--leading-normal);
+      color: var(--text-primary);
+      background-color: var(--bg-primary);
+      padding: var(--space-8);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Container */
+    .container {
+      max-width: var(--content-width);
+      margin: 0 auto;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4 {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      line-height: var(--leading-tight);
+      color: var(--text-primary);
+      margin-bottom: var(--space-6);
+    }
+
+    h1 {
+      font-size: var(--text-4xl);
+      margin-bottom: var(--space-8);
+    }
+
+    h2 {
+      font-size: var(--text-3xl);
+      margin-top: var(--space-16);
+    }
+
+    h3 {
+      font-size: var(--text-2xl);
+      margin-top: var(--space-12);
+    }
+
+    h4 {
+      font-size: var(--text-xl);
+      margin-top: var(--space-8);
+    }
+
+    p {
+      margin-bottom: var(--space-6);
+      color: var(--text-primary);
+    }
+
+    .lead {
+      font-size: var(--text-lg);
+      color: var(--text-secondary);
+      line-height: var(--leading-relaxed);
+    }
+
+    .muted {
+      color: var(--text-muted);
+    }
+
+    /* Accent text */
+    .accent {
+      color: var(--accent);
+    }
+
+    /* Links */
+    a {
+      color: var(--text-primary);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      transition: border-color 0.2s ease;
+    }
+
+    a:hover {
+      border-color: var(--text-primary);
+    }
+
+    /* Divider */
+    hr {
+      border: none;
+      height: 1px;
+      background-color: var(--border);
+      margin: var(--space-16) 0;
+    }
+
+    /* Color Palette Demo */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-4);
+      margin: var(--space-8) 0;
+    }
+
+    .color-item {
+      padding: var(--space-6);
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+
+    .color-item .label {
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      margin-bottom: var(--space-2);
+    }
+
+    .color-item .hex {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+    }
+
+    /* Typography Demo */
+    .type-scale {
+      margin: var(--space-8) 0;
+    }
+
+    .type-item {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-4);
+      padding: var(--space-4) 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .type-item .label {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      min-width: 100px;
+    }
+
+    .type-item .sample {
+      font-family: var(--font-sans);
+    }
+
+    /* Serif sample */
+    .serif-sample {
+      font-family: var(--font-serif);
+    }
+
+    /* Button */
+    .button {
+      display: inline-block;
+      padding: var(--space-4) var(--space-6);
+      background-color: var(--accent);
+      color: var(--bg-primary);
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+
+    .button:hover {
+      opacity: 0.85;
+      border: none;
+    }
+
+    /* Card */
+    .card {
+      background-color: var(--bg-tertiary);
+      padding: var(--space-8);
+      border-radius: 4px;
+      margin: var(--space-8) 0;
+    }
+
+    /* Test Info */
+    .test-info {
+      position: fixed;
+      top: var(--space-4);
+      right: var(--space-4);
+      background-color: var(--bg-tertiary);
+      padding: var(--space-4);
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding: var(--space-4);
+      }
+
+      h1 {
+        font-size: var(--text-3xl);
+      }
+
+      h2 {
+        font-size: var(--text-2xl);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="test-info">
+    <div id="color-scheme">Detecting...</div>
+    <div>Content Width: 680px</div>
+    <div>Base Size: 18px</div>
+  </div>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <p class="muted">设计系统测试</p>
+      <h1>The Art of Minimal Design</h1>
+      <p class="lead">
+        这是一个 Every.to 风格的设计系统测试页面。我们使用 Playfair Display 衬线字体作为标题，
+        Inter 无衬线字体作为正文。配色采用黑白极简风格，内容宽度限制在 680px 以获得最佳阅读体验。
+      </p>
+    </header>
+
+    <hr>
+
+    <!-- Color Palette -->
+    <section>
+      <h2>Color Palette 配色系统</h2>
+
+      <h4>Light Mode Colors</h4>
+      <div class="color-grid">
+        <div class="color-item" style="background-color: #FFFFFF;">
+          <div class="label" style="color: #1A1A1A;">bg-primary</div>
+          <div class="hex" style="color: #666666;">#FFFFFF</div>
+        </div>
+        <div class="color-item" style="background-color: #F7F7F7;">
+          <div class="label" style="color: #1A1A1A;">bg-tertiary</div>
+          <div class="hex" style="color: #666666;">#F7F7F7</div>
+        </div>
+        <div class="color-item" style="background-color: #1A1A1A;">
+          <div class="label" style="color: #FFFFFF;">text-primary / accent</div>
+          <div class="hex" style="color: #999999;">#1A1A1A</div>
+        </div>
+        <div class="color-item" style="background-color: #666666;">
+          <div class="label" style="color: #FFFFFF;">text-secondary</div>
+          <div class="hex" style="color: #CCCCCC;">#666666</div>
+        </div>
+      </div>
+
+      <h4>Dark Mode Colors</h4>
+      <div class="color-grid">
+        <div class="color-item" style="background-color: #0A0A0A; border-color: #292929;">
+          <div class="label" style="color: #EEEEEE;">dark-bg-primary</div>
+          <div class="hex" style="color: #737373;">#0A0A0A</div>
+        </div>
+        <div class="color-item" style="background-color: #141414; border-color: #292929;">
+          <div class="label" style="color: #EEEEEE;">dark-bg-tertiary</div>
+          <div class="hex" style="color: #737373;">#141414</div>
+        </div>
+        <div class="color-item" style="background-color: #EEEEEE;">
+          <div class="label" style="color: #0A0A0A;">dark-text-primary</div>
+          <div class="hex" style="color: #666666;">#EEEEEE</div>
+        </div>
+        <div class="color-item" style="background-color: #FFFFFF;">
+          <div class="label" style="color: #0A0A0A;">dark-accent</div>
+          <div class="hex" style="color: #666666;">#FFFFFF</div>
+        </div>
+      </div>
+    </section>
+
+    <hr>
+
+    <!-- Typography Scale -->
+    <section>
+      <h2>Typography Scale 字号系统</h2>
+      <p class="muted">基准字号 18px，使用 rem 单位</p>
+
+      <div class="type-scale">
+        <div class="type-item">
+          <span class="label">text-5xl</span>
+          <span class="sample" style="font-size: var(--text-5xl); font-family: var(--font-serif);">优雅标题 64px</span>
+        </div>
+        <div class="type-item">
+          <span class="label">text-4xl</span>
+          <span class="sample" style="font-size: var(--text-4xl); font-family: var(--font-serif);">大标题 56px</span>
+        </div>
+        <div class="type-item">
+          <span class="label">text-3xl</span>
+          <span class="sample" style="font-size: var(--text-3xl); font-family: var(--font-serif);">中标题 40px</span>
+        </div>
+        <div class="type-item">
+          <span class="label">text-2xl</span>
+          <span class="sample" style="font-size: var(--text-2xl);">小标题 32px</span>
+        </div>
+        <div class="type-item">
+          <span class="label">text-xl</span>
+          <span class="sample" style="font-size: var(--text-xl);">副标题 24px</span>
+        </div>
+        <div class="type-item">
+          <span class="label">text-lg</span>
+          <span class="sample" style="font-size: var(--text-lg);">大正文 20px</span>
+        </div>
+        <div class="type-item">
+          <span class="label">text-base</span>
+          <span class="sample" style="font-size: var(--text-base);">正文 18px - 行高 1.7，舒适阅读体验</span>
+        </div>
+      </div>
+    </section>
+
+    <hr>
+
+    <!-- Serif vs Sans -->
+    <section>
+      <h2>Font Families 字体对比</h2>
+
+      <h3>Sans-Serif 无衬线</h3>
+      <p style="font-family: var(--font-sans);">
+        Inter, -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif
+      </p>
+      <p style="font-family: var(--font-sans);">
+        正文使用无衬线字体，确保在屏幕上的可读性。行高设置为 1.7，
+        给文字充足的呼吸空间，长文阅读不易疲劳。
+      </p>
+
+      <h3>Serif 衬线字体</h3>
+      <p style="font-family: var(--font-serif); font-size: var(--text-lg);">
+        Playfair Display, Noto Serif SC, Georgia, serif
+      </p>
+      <p class="serif-sample" style="font-size: var(--text-lg);">
+        衬线字体用于标题，传递优雅与经典的气息。Playfair Display 是
+        一款高对比度衬线字体，非常适合大字号展示。Noto Serif SC 为
+        中文字符提供优雅的衬线风格。
+      </p>
+    </section>
+
+    <hr>
+
+    <!-- Content Width Demo -->
+    <section>
+      <h2>Content Width 内容宽度</h2>
+      <p>
+        当前容器最大宽度为 <strong>680px</strong>。这是一个经过验证的最佳阅读宽度，
+        每行大约包含 60-70 个字符（英文字符计），符合排版学中的可读性建议。
+      </p>
+      <p>
+        研究表明，当行过长时，读者的眼睛需要移动更长的距离才能找到下一行的开头，
+        这会增加阅读疲劳。过短的行则会频繁打断阅读节奏。680px 在 18px 基准字号下
+        达到了最佳平衡。
+      </p>
+    </section>
+
+    <hr>
+
+    <!-- Components -->
+    <section>
+      <h2>Components 组件示例</h2>
+
+      <h4>Card 卡片</h4>
+      <div class="card">
+        <h3 style="margin-top: 0;">Card Title</h3>
+        <p class="muted">
+          卡片使用 bg-tertiary (#F7F7F7) 作为背景，与纯白背景形成微妙的层次感。
+          这种设计避免了强烈的对比，营造温和的视觉层次。
+        </p>
+        <button class="button">Button</button>
+      </div>
+
+      <h4>Link 链接</h4>
+      <p>
+        这是一个 <a href="#">带下划线动画的链接</a>，悬停时边框颜色会加深。
+        链接使用与正文相同的颜色，保持极简风格的一致性。
+      </p>
+    </section>
+
+    <hr>
+
+    <!-- Dark Mode Note -->
+    <section>
+      <h2>Dark Mode 暗色模式</h2>
+      <p>
+        本页面支持系统级暗色模式偏好。如果你的系统设置为深色主题，
+        页面会自动切换到暗色配色方案：
+      </p>
+      <ul style="margin-left: var(--space-6); color: var(--text-secondary);">
+        <li>背景: #0A0A0A (深黑)</li>
+        <li>文字: #EEEEEE (浅灰白)</li>
+        <li>强调: #FFFFFF (纯白)</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <footer style="margin-top: var(--space-20); padding-bottom: var(--space-12);">
+      <p class="muted" style="text-align: center;">
+        Every.to Style Design System Test Page<br>
+        <span style="font-family: var(--font-mono); font-size: var(--text-xs);">
+          Generated: 2026-02-14
+        </span>
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    // Detect and display color scheme
+    const colorSchemeDiv = document.getElementById('color-scheme');
+
+    function updateColorScheme() {
+      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      colorSchemeDiv.textContent = isDark ? 'Dark Mode 🌙' : 'Light Mode ☀️';
+      colorSchemeDiv.style.color = isDark ? '#EEEEEE' : '#1A1A1A';
+    }
+
+    updateColorScheme();
+
+    // Listen for changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateColorScheme);
+  </script>
+</body>
+</html>

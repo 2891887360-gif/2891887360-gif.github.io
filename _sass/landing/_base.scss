@@ -9,27 +9,27 @@
 // ----------------------------------------
 
 :root {
-  // Background colors
-  --landing-bg-primary: #{$gray-50};
-  --landing-bg-secondary: #{$gray-0};
-  --landing-bg-tertiary: #{$gray-100};
-  --landing-bg-elevated: #{$gray-0};
+  // Every.to Style - Background colors
+  --landing-bg-primary: #{$bg-primary};
+  --landing-bg-secondary: #{$bg-secondary};
+  --landing-bg-tertiary: #{$bg-tertiary};
+  --landing-bg-elevated: #{$bg-primary};
 
-  // Text colors
-  --landing-text-primary: #{$gray-900};
-  --landing-text-secondary: #{$gray-600};
-  --landing-text-tertiary: #{$gray-500};
-  --landing-text-muted: #{$gray-400};
+  // Every.to Style - Text colors
+  --landing-text-primary: #{$text-primary};
+  --landing-text-secondary: #{$text-secondary};
+  --landing-text-tertiary: #{$text-secondary};
+  --landing-text-muted: #{$text-muted};
 
-  // Border colors
-  --landing-border-primary: #{$gray-200};
-  --landing-border-secondary: #{$gray-100};
+  // Every.to Style - Border colors
+  --landing-border-primary: #{$border};
+  --landing-border-secondary: #{$border};
 
-  // Accent colors
-  --landing-accent: #{$indigo-500};
-  --landing-accent-hover: #{$indigo-600};
-  --landing-accent-light: #{$indigo-100};
-  --landing-accent-lighter: #{$indigo-50};
+  // Every.to Style - Accent colors (Black/White)
+  --landing-accent: #{$accent};
+  --landing-accent-hover: #{$text-secondary};
+  --landing-accent-light: #{$bg-tertiary};
+  --landing-accent-lighter: #{$bg-tertiary};
 
   // Shadows
   --landing-shadow-sm: #{$shadow-sm};
@@ -37,14 +37,16 @@
   --landing-shadow-lg: #{$shadow-lg};
   --landing-shadow-xl: #{$shadow-xl};
 
-  // Gradients
-  --landing-gradient-hero: linear-gradient(135deg, #{$indigo-500} 0%, #{$pink-500} 50%, #{$indigo-400} 100%);
-  --landing-gradient-text: linear-gradient(135deg, #{$indigo-500} 0%, #{$pink-500} 100%);
-  --landing-gradient-border: linear-gradient(135deg, #{$indigo-500}, #{$pink-500});
-
   // Typography
   --landing-font-family: #{$font-family-base};
+  --landing-font-serif: #{$font-family-serif};
   --landing-font-mono: #{$font-family-mono};
+
+  // Widths
+  --width-article: #{$width-article};
+  --width-medium: #{$width-medium};
+  --width-wide: #{$width-wide};
+  --width-full: #{$width-full};
 
   // Spacing
   --landing-nav-height: 72px;
@@ -54,37 +56,33 @@
 
 // Dark mode
 [data-mode="dark"] {
-  // Background colors
-  --landing-bg-primary: #{$dark-gray-50};
-  --landing-bg-secondary: #{$dark-gray-100};
-  --landing-bg-tertiary: #{$dark-gray-200};
-  --landing-bg-elevated: #{$dark-gray-200};
+  // Every.to Style - Background colors
+  --landing-bg-primary: #{$dark-bg-primary};
+  --landing-bg-secondary: #{$dark-bg-secondary};
+  --landing-bg-tertiary: #{$dark-bg-tertiary};
+  --landing-bg-elevated: #{$dark-bg-tertiary};
 
-  // Text colors
-  --landing-text-primary: #{$dark-gray-900};
-  --landing-text-secondary: #{$dark-gray-700};
-  --landing-text-tertiary: #{$dark-gray-600};
-  --landing-text-muted: #{$dark-gray-500};
+  // Every.to Style - Text colors
+  --landing-text-primary: #{$dark-text-primary};
+  --landing-text-secondary: #{$dark-text-secondary};
+  --landing-text-tertiary: #{$dark-text-muted};
+  --landing-text-muted: #{$dark-text-muted};
 
-  // Border colors
-  --landing-border-primary: #{$dark-gray-300};
-  --landing-border-secondary: #{$dark-gray-200};
+  // Every.to Style - Border colors
+  --landing-border-primary: #{$dark-border};
+  --landing-border-secondary: #{$dark-border};
 
-  // Accent colors
-  --landing-accent: #{$indigo-400};
-  --landing-accent-hover: #{$indigo-300};
-  --landing-accent-light: rgba(#{$indigo-500}, 0.2);
-  --landing-accent-lighter: rgba(#{$indigo-500}, 0.1);
+  // Every.to Style - Accent colors
+  --landing-accent: #{$dark-accent};
+  --landing-accent-hover: #{$dark-text-secondary};
+  --landing-accent-light: #{$dark-bg-tertiary};
+  --landing-accent-lighter: #{$dark-bg-tertiary};
 
   // Shadows
   --landing-shadow-sm: #{$dark-shadow-sm};
   --landing-shadow-md: #{$dark-shadow-md};
   --landing-shadow-lg: #{$dark-shadow-lg};
   --landing-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
-
-  // Gradients - slightly adjusted for dark mode
-  --landing-gradient-hero: linear-gradient(135deg, #{$indigo-600} 0%, #{$pink-600} 50%, #{$indigo-500} 100%);
-  --landing-gradient-text: linear-gradient(135deg, #{$indigo-400} 0%, #{$pink-400} 100%);
 }
 
 // ----------------------------------------
@@ -224,7 +222,68 @@
 
 // Text colors
 .landing-text-gradient {
-  @include gradient-text(var(--landing-gradient-text));
+  // Every.to style - no gradient text, use solid accent
+  color: var(--landing-accent);
+}
+
+// ----------------------------------------
+// Multi-Width Container Classes
+// ----------------------------------------
+
+.container-article {
+  width: 100%;
+  max-width: var(--width-article);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: #{$space-5};
+  padding-right: #{$space-5};
+
+  @include media-md {
+    padding-left: #{$space-8};
+    padding-right: #{$space-8};
+  }
+}
+
+.container-medium {
+  width: 100%;
+  max-width: var(--width-medium);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: #{$space-5};
+  padding-right: #{$space-5};
+
+  @include media-md {
+    padding-left: #{$space-8};
+    padding-right: #{$space-8};
+  }
+}
+
+.container-wide {
+  width: 100%;
+  max-width: var(--width-wide);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: #{$space-5};
+  padding-right: #{$space-5};
+
+  @include media-md {
+    padding-left: #{$space-8};
+    padding-right: #{$space-8};
+  }
+}
+
+.container-full {
+  width: 100%;
+  max-width: var(--width-full);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: #{$space-5};
+  padding-right: #{$space-5};
+
+  @include media-md {
+    padding-left: #{$space-8};
+    padding-right: #{$space-8};
+  }
 }
 
 .landing-text-primary {
@@ -401,8 +460,8 @@
     bottom: -2px;
     left: 0;
     width: 0;
-    height: 2px;
-    background: var(--landing-gradient-border);
+    height: 1px;
+    background: currentColor;
     transition: width $transition-base;
   }
 
