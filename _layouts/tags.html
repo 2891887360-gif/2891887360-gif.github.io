@@ -1,22 +1,18 @@
 ---
-layout: page
+layout: blog-taxonomy
 # All the Tags of posts.
 ---
 
-<div id="tags" class="d-flex flex-wrap mx-xl-2">
-  {% assign tags = '' | split: '' %}
-  {% for t in site.tags %}
-    {% assign tags = tags | push: t[0] %}
-  {% endfor %}
+<div class="tag-list">
+  {% assign sorted_tags = site.tags | sort %}
 
-  {% assign sorted_tags = tags | sort_natural %}
+  {% for tag in sorted_tags %}
+    {% assign tag_name = tag | first %}
+    {% assign posts_count = tag | last | size %}
 
-  {% for t in sorted_tags %}
-    <div>
-      <a class="tag" href="{{ t | slugify | url_encode | prepend: '/tags/' | append: '/' | relative_url }}">
-        {{ t -}}
-        <span class="text-muted">{{ site.tags[t].size }}</span>
-      </a>
-    </div>
+    <a href="/tags/{{ tag_name | slugify | url_encode }}/" class="tag">
+      {{ tag_name }}
+      <span class="tag-count">{{ posts_count }}</span>
+    </a>
   {% endfor %}
 </div>

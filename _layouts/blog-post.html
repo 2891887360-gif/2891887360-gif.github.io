@@ -1,0 +1,91 @@
+---
+layout: landing
+---
+
+<article class="blog-post">
+  <!-- 文章头部 - 窄容器居中 -->
+  <header class="post-header">
+    <div class="container-article">
+      <!-- 分类 -->
+      {% if page.categories.size > 0 %}
+      <a href="/categories/{{ page.categories[0] | slugify }}/" class="post-category-link">
+        {{ page.categories[0] }}
+      </a>
+      {% endif %}
+
+      <!-- 标题 - 衬线体大字 -->
+      <h1 class="post-title">{{ page.title }}</h1>
+
+      <!-- 描述/副标题 -->
+      {% if page.description %}
+      <p class="post-subtitle">{{ page.description }}</p>
+      {% endif %}
+
+      <!-- 作者信息 -->
+      <div class="post-meta">
+        {% if site.avatar %}
+        <img src="{{ site.avatar | relative_url }}" alt="{{ site.social.name | default: site.title }}" class="post-author-avatar">
+        {% endif %}
+        <div class="post-author-info">
+          <span class="post-author-name">{{ site.social.name | default: site.title }}</span>
+          <time class="post-date" datetime="{{ page.date | date_to_xmlschema }}">
+            {{ page.date | date: "%Y年%m月%d日" }}
+          </time>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 封面图 - 宽容器 -->
+  {% if page.image %}
+  <figure class="post-cover">
+    <div class="container-wide">
+      <img src="{{ page.image | relative_url }}" alt="{{ page.title }}">
+    </div>
+  </figure>
+  {% endif %}
+
+  <!-- 正文 - 窄容器 -->
+  <div class="post-content container-article">
+    {{ content }}
+  </div>
+
+  <!-- 标签 -->
+  {% if page.tags.size > 0 %}
+  <div class="post-tags container-article">
+    {% for tag in page.tags %}
+    <a href="/tags/{{ tag | slugify }}/" class="post-tag">#{{ tag }}</a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- 分享按钮 -->
+  {% if site.share.enabled %}
+  <div class="post-share container-article">
+    {% include post-sharing.html lang=lang %}
+  </div>
+  {% endif %}
+
+  <!-- 上一篇/下一篇 -->
+  <nav class="post-navigation container-article">
+    {% if page.previous.url %}
+    <a href="{{ page.previous.url | relative_url }}" class="post-nav-link post-nav-prev">
+      <span class="post-nav-label">上一篇</span>
+      <span class="post-nav-title">{{ page.previous.title }}</span>
+    </a>
+    {% endif %}
+    {% if page.next.url %}
+    <a href="{{ page.next.url | relative_url }}" class="post-nav-link post-nav-next">
+      <span class="post-nav-label">下一篇</span>
+      <span class="post-nav-title">{{ page.next.title }}</span>
+    </a>
+    {% endif %}
+  </nav>
+
+  <!-- 评论 -->
+  {% if page.comments %}
+  <div class="post-comments container-article">
+    {% include comment.html lang=lang %}
+  </div>
+  {% endif %}
+</article>
