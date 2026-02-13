@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>博客系统设计测试 - Every.to 风格</title>
+
+  <!-- Google Fonts - Playfair Display & Noto Serif SC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================
+       博客系统设计测试 - Every.to 风格
+       ========================================== */
+
+    /* CSS Custom Properties */
+    :root {
+      /* Colors */
+      --bg-primary: #FFFFFF;
+      --bg-secondary: #FFFFFF;
+      --bg-tertiary: #F7F7F7;
+      --text-primary: #1A1A1A;
+      --text-secondary: #666666;
+      --text-muted: #999999;
+      --accent: #1A1A1A;
+      --border: #E5E5E5;
+
+      /* Typography */
+      --font-serif: 'Playfair Display', 'Noto Serif SC', Georgia, serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+      /* Font Sizes (18px base) */
+      --text-xs: 0.75rem;
+      --text-sm: 0.875rem;
+      --text-base: 1.125rem;
+      --text-lg: 1.25rem;
+      --text-xl: 1.5rem;
+      --text-2xl: 2rem;
+      --text-3xl: 2.5rem;
+      --text-4xl: 3.5rem;
+
+      /* Line Height */
+      --leading-tight: 1.3;
+      --leading-normal: 1.7;
+      --leading-relaxed: 1.9;
+
+      /* Spacing */
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --space-12: 3rem;
+      --space-16: 4rem;
+      --space-20: 5rem;
+      --space-24: 6rem;
+
+      /* Widths */
+      --width-article: 680px;
+      --width-medium: 900px;
+      --width-wide: 1100px;
+      --width-full: 1400px;
+
+      /* Border Radius */
+      --radius-sm: 0.25rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-full: 9999px;
+    }
+
+    /* Dark Mode */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-primary: #0A0A0A;
+        --bg-secondary: #0A0A0A;
+        --bg-tertiary: #141414;
+        --text-primary: #EEEEEE;
+        --text-secondary: #A3A3A3;
+        --text-muted: #737373;
+        --accent: #FFFFFF;
+        --border: #292929;
+      }
+    }
+
+    /* Base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: var(--text-base);
+      line-height: var(--leading-normal);
+      color: var(--text-primary);
+      background-color: var(--bg-primary);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Navigation */
+    .nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 72px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .nav-bar {
+        background: rgba(10, 10, 10, 0.95);
+      }
+    }
+
+    .nav-logo {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      margin-left: auto;
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9375rem;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+
+    /* Containers */
+    .container-article {
+      width: 100%;
+      max-width: var(--width-article);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .container-wide {
+      width: 100%;
+      max-width: var(--width-wide);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .container-full {
+      width: 100%;
+      max-width: var(--width-full);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Main Content */
+    .main-content {
+      padding-top: 72px;
+    }
+
+    /* Page Header */
+    .page-header {
+      padding: 80px 0 48px;
+      text-align: center;
+    }
+
+    .page-title {
+      font-family: var(--font-serif);
+      font-size: var(--text-4xl);
+      font-weight: 600;
+      line-height: var(--leading-tight);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .page-description {
+      font-size: var(--text-lg);
+      color: var(--text-secondary);
+    }
+
+    /* Post Header */
+    .post-header {
+      padding: 80px 0 48px;
+      text-align: center;
+    }
+
+    .post-category-link {
+      display: inline-block;
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      margin-bottom: 1rem;
+    }
+
+    .post-category-link:hover {
+      color: var(--text-primary);
+    }
+
+    .post-title {
+      font-family: var(--font-serif);
+      font-size: var(--text-4xl);
+      font-weight: 600;
+      line-height: var(--leading-tight);
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .post-subtitle {
+      font-size: var(--text-xl);
+      color: var(--text-secondary);
+      line-height: var(--leading-normal);
+      max-width: 560px;
+      margin: 0 auto 2rem;
+    }
+
+    .post-meta {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .post-author-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--bg-tertiary);
+    }
+
+    .post-author-info {
+      text-align: left;
+    }
+
+    .post-author-name {
+      display: block;
+      font-weight: 500;
+      font-size: var(--text-base);
+    }
+
+    .post-date {
+      display: block;
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+    }
+
+    /* Post Cover */
+    .post-cover {
+      margin-bottom: 3rem;
+    }
+
+    .post-cover img {
+      width: 100%;
+      border-radius: 12px;
+      display: block;
+    }
+
+    /* Post Content */
+    .post-content {
+      font-size: var(--text-base);
+      line-height: var(--leading-normal);
+      padding-bottom: 3rem;
+    }
+
+    .post-content p {
+      margin-bottom: 1.75em;
+    }
+
+    .post-content h2, .post-content h3 {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      margin-top: 2.5em;
+      margin-bottom: 0.75em;
+      line-height: var(--leading-tight);
+    }
+
+    .post-content h2 {
+      font-size: var(--text-2xl);
+    }
+
+    .post-content h3 {
+      font-size: var(--text-xl);
+    }
+
+    .post-content a {
+      color: var(--text-primary);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .post-content a:hover {
+      color: var(--text-secondary);
+    }
+
+    .post-content blockquote {
+      margin: 2em 0;
+      padding-left: 1.5em;
+      border-left: 3px solid var(--text-primary);
+      font-style: italic;
+      color: var(--text-secondary);
+    }
+
+    .post-content pre {
+      background: var(--bg-tertiary);
+      padding: 1.25em;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 2em 0;
+      font-size: 0.9em;
+      font-family: var(--font-mono);
+    }
+
+    .post-content :not(pre) > code {
+      background: var(--bg-tertiary);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+      font-family: var(--font-mono);
+    }
+
+    /* Post Tags */
+    .post-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .post-tag {
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 0.25rem 0.75rem;
+      background: var(--bg-tertiary);
+      border-radius: 9999px;
+      transition: all 0.2s;
+    }
+
+    .post-tag:hover {
+      color: var(--text-primary);
+      background: var(--border);
+    }
+
+    /* Post Navigation */
+    .post-navigation {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      padding: 3rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .post-nav-link {
+      text-decoration: none;
+      color: inherit;
+      padding: 1rem;
+      border-radius: 8px;
+      transition: background-color 0.2s;
+    }
+
+    .post-nav-link:hover {
+      background-color: var(--bg-tertiary);
+    }
+
+    .post-nav-prev {
+      text-align: left;
+    }
+
+    .post-nav-next {
+      text-align: right;
+    }
+
+    .post-nav-label {
+      display: block;
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .post-nav-title {
+      font-family: var(--font-serif);
+      font-size: var(--text-lg);
+      font-weight: 500;
+    }
+
+    /* Blog List */
+    .blog-list {
+      padding-bottom: 5rem;
+    }
+
+    .blog-list-item {
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .blog-list-item:first-child {
+      padding-top: 0;
+    }
+
+    .blog-list-link {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 2rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    @media (max-width: 768px) {
+      .blog-list-link {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+
+    .blog-list-image {
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      border-radius: 12px;
+      background: var(--bg-tertiary);
+    }
+
+    .blog-list-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .blog-list-link:hover .blog-list-image img {
+      transform: scale(1.03);
+    }
+
+    .blog-list-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .blog-list-category {
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+
+    .blog-list-title {
+      font-family: var(--font-serif);
+      font-size: var(--text-xl);
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 0.5rem;
+      transition: color 0.2s;
+    }
+
+    .blog-list-link:hover .blog-list-title {
+      color: var(--text-secondary);
+    }
+
+    .blog-list-excerpt {
+      font-size: var(--text-base);
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .blog-list-date {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+    }
+
+    /* Pagination */
+    .blog-pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+      padding-top: 3rem;
+    }
+
+    .pagination-prev,
+    .pagination-next {
+      font-size: var(--text-base);
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .pagination-prev:hover,
+    .pagination-next:hover {
+      color: var(--text-primary);
+      background-color: var(--bg-tertiary);
+    }
+
+    .pagination-info {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    /* Taxonomy (Tags/Categories) */
+    .tag-list, .category-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      padding: 2rem 0;
+    }
+
+    .tag, .category {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg-tertiary);
+      border-radius: 9999px;
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: var(--text-base);
+      transition: all 0.2s;
+    }
+
+    .tag:hover, .category:hover {
+      background: var(--text-primary);
+      color: var(--bg-primary);
+    }
+
+    .tag-count, .category-count {
+      font-size: var(--text-sm);
+      opacity: 0.7;
+    }
+
+    /* Archive List */
+    .archive-year {
+      font-family: var(--font-serif);
+      font-size: var(--text-2xl);
+      font-weight: 600;
+      margin: 3rem 0 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .archive-year:first-child {
+      margin-top: 0;
+    }
+
+    .archive-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .archive-list li {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .archive-list li a {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: var(--text-lg);
+    }
+
+    .archive-list li a:hover {
+      color: var(--text-secondary);
+    }
+
+    .archive-date {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      flex-shrink: 0;
+      margin-left: 1rem;
+    }
+
+    /* Post List (Taxonomy Detail) */
+    .post-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .post-list li {
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .post-list li a {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .post-list li a:hover {
+      color: var(--text-secondary);
+    }
+
+    .post-title-small {
+      font-family: var(--font-serif);
+      font-size: var(--text-lg);
+    }
+
+    .post-date-small {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      flex-shrink: 0;
+      margin-left: 1rem;
+    }
+
+    /* Demo Section */
+    .demo-section {
+      padding: 4rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .demo-section-title {
+      font-family: var(--font-serif);
+      font-size: var(--text-2xl);
+      font-weight: 600;
+      margin-bottom: 2rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    /* Width Demo */
+    .width-demo-box {
+      background: var(--bg-tertiary);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 1rem 0;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+    }
+
+    /* Test Info */
+    .test-info {
+      position: fixed;
+      top: 80px;
+      right: 1rem;
+      background: var(--bg-tertiary);
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      z-index: 99;
+      max-width: 200px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .page-title, .post-title {
+        font-size: var(--text-3xl);
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .test-info {
+        position: static;
+        margin: 1rem;
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav-bar">
+    <a href="#" class="nav-logo">王若如</a>
+    <div class="nav-links">
+      <a href="#article">文章详情</a>
+      <a href="#list">文章列表</a>
+      <a href="#taxonomy">分类标签</a>
+      <a href="#archive">归档</a>
+    </div>
+  </nav>
+
+  <!-- Test Info -->
+  <div class="test-info">
+    <div id="color-scheme">Detecting...</div>
+    <div style="margin-top: 0.5rem;">Widths: 680/900/1100/1400px</div>
+    <div>Base: 18px / Line: 1.75</div>
+    <div style="margin-top: 0.5rem; color: var(--text-muted);">
+      博客系统设计测试
+    </div>
+  </div>
+
+  <main class="main-content">
+    <!-- Article Detail Demo -->
+    <section id="article" class="demo-section">
+      <div class="container-wide">
+        <h2 class="demo-section-title">1. 文章详情页 (Post Detail)</h2>
+      </div>
+
+      <!-- Post Header -->
+      <header class="post-header">
+        <div class="container-article">
+          <a href="#" class="post-category-link">技术</a>
+          <h1 class="post-title">博客系统统一设计实践</h1>
+          <p class="post-subtitle">将 Jekyll 博客从 Chirpy 原布局迁移到 Every.to 风格的 Landing 设计体系</p>
+          <div class="post-meta">
+            <div class="post-author-avatar"></div>
+            <div class="post-author-info">
+              <span class="post-author-name">王若如</span>
+              <time class="post-date">2026年02月14日</time>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Post Cover -->
+      <figure class="post-cover">
+        <div class="container-wide">
+          <div style="aspect-ratio: 21/9; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px;"></div>
+        </div>
+      </figure>
+
+      <!-- Post Content -->
+      <div class="post-content container-article">
+        <p>这是一段正文示例。博客系统统一设计的目标是将所有页面迁移到一致的视觉语言下。我们使用 Playfair Display 作为标题字体，Inter 作为正文字体，营造优雅的阅读体验。</p>
+
+        <h2>设计原则</h2>
+        <p>在重构过程中，我们遵循以下几个核心原则：</p>
+
+        <blockquote>
+          "设计的本质是沟通。好的设计应该让读者专注于内容，而不是被视觉元素分散注意力。"
+        </blockquote>
+
+        <h3>1. 排版层次</h3>
+        <p>通过字号、字重和行高的变化建立清晰的视觉层次。标题使用衬线体，正文使用无衬线体，代码使用等宽字体。</p>
+
+        <h3>2. 容器宽度</h3>
+        <p>不同的内容类型使用不同的容器宽度，以达到最佳阅读体验：</p>
+
+        <pre><code>// 容器宽度变量
+$width-article: 680px;   // 文章正文
+$width-wide: 1100px;     // 列表页面
+$width-full: 1400px;     // 全宽布局</code></pre>
+
+        <p>这种多宽度系统确保了不同场景下的内容都能以最优方式呈现。</p>
+      </div>
+
+      <!-- Post Tags -->
+      <div class="post-tags container-article">
+        <a href="#" class="post-tag">#Jekyll</a>
+        <a href="#" class="post-tag">#CSS</a>
+        <a href="#" class="post-tag">#设计系统</a>
+        <a href="#" class="post-tag">#Every.to</a>
+      </div>
+
+      <!-- Post Navigation -->
+      <nav class="post-navigation container-article">
+        <a href="#" class="post-nav-link post-nav-prev">
+          <span class="post-nav-label">上一篇</span>
+          <span class="post-nav-title">如何写好技术博客</span>
+        </a>
+        <a href="#" class="post-nav-link post-nav-next">
+          <span class="post-nav-label">下一篇</span>
+          <span class="post-nav-title">算法竞赛入门指南</span>
+        </a>
+      </nav>
+    </section>
+
+    <!-- Blog List Demo -->
+    <section id="list" class="demo-section">
+      <div class="container-wide">
+        <h2 class="demo-section-title">2. 文章列表页 (Blog List)</h2>
+
+        <header class="page-header" style="padding-top: 0;">
+          <h1 class="page-title">Blog</h1>
+          <p class="page-description">技术、思想、生活</p>
+        </header>
+
+        <div class="blog-list">
+          <article class="blog-list-item">
+            <a href="#" class="blog-list-link">
+              <div class="blog-list-image">
+                <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+              </div>
+              <div class="blog-list-content">
+                <span class="blog-list-category">区块链</span>
+                <h2 class="blog-list-title">零知识证明入门：从概念到代码</h2>
+                <p class="blog-list-excerpt">零知识证明（Zero-Knowledge Proof）是一种密码学协议，允许证明者向验证者证明某个陈述是真实的，而无需透露任何...</p>
+                <time class="blog-list-date">2026.02.10</time>
+              </div>
+            </a>
+          </article>
+
+          <article class="blog-list-item">
+            <a href="#" class="blog-list-link">
+              <div class="blog-list-image">
+                <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+              </div>
+              <div class="blog-list-content">
+                <span class="blog-list-category">算法</span>
+                <h2 class="blog-list-title">动态规划的空间优化技巧</h2>
+                <p class="blog-list-excerpt">在使用动态规划解决问题时，空间复杂度往往是一个容易被忽视但又至关重要的因素。本文将探讨几种常见的空间优化方法...</p>
+                <time class="blog-list-date">2026.02.08</time>
+              </div>
+            </a>
+          </article>
+
+          <article class="blog-list-item">
+            <a href="#" class="blog-list-link">
+              <div class="blog-list-image">
+                <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);"></div>
+              </div>
+              <div class="blog-list-content">
+                <span class="blog-list-category">随笔</span>
+                <h2 class="blog-list-title">语言的边界就是世界的边界</h2>
+                <p class="blog-list-excerpt">维特根斯坦在《逻辑哲学论》中提出了这个著名命题。作为程序员，我对这句话有着独特的理解...</p>
+                <time class="blog-list-date">2026.02.05</time>
+              </div>
+            </a>
+          </article>
+        </div>
+
+        <nav class="blog-pagination">
+          <a href="#" class="pagination-prev">← 上一页</a>
+          <span class="pagination-info">1 / 5</span>
+          <a href="#" class="pagination-next">下一页 →</a>
+        </nav>
+      </div>
+    </section>
+
+    <!-- Taxonomy Demo -->
+    <section id="taxonomy" class="demo-section">
+      <div class="container-wide">
+        <h2 class="demo-section-title">3. 分类与标签 (Taxonomy)</h2>
+
+        <h3 style="font-family: var(--font-serif); font-size: var(--text-xl); margin: 2rem 0 1rem;">所有标签</h3>
+        <div class="tag-list">
+          <a href="#" class="tag">Jekyll <span class="tag-count">12</span></a>
+          <a href="#" class="tag">区块链 <span class="tag-count">8</span></a>
+          <a href="#" class="tag">算法 <span class="tag-count">15</span></a>
+          <a href="#" class="tag">CSS <span class="tag-count">6</span></a>
+          <a href="#" class="tag">哲学 <span class="tag-count">4</span></a>
+          <a href="#" class="tag">设计系统 <span class="tag-count">3</span></a>
+          <a href="#" class="tag">零知识证明 <span class="tag-count">5</span></a>
+          <a href="#" class="tag">Solidity <span class="tag-count">7</span></a>
+          <a href="#" class="tag">动态规划 <span class="tag-count">9</span></a>
+        </div>
+
+        <h3 style="font-family: var(--font-serif); font-size: var(--text-xl); margin: 3rem 0 1rem;">所有分类</h3>
+        <div class="category-list">
+          <a href="#" class="category">技术 <span class="category-count">24</span></a>
+          <a href="#" class="category">区块链 <span class="category-count">12</span></a>
+          <a href="#" class="category">算法竞赛 <span class="category-count">18</span></a>
+          <a href="#" class="category">随笔 <span class="category-count">8</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Archive Demo -->
+    <section id="archive" class="demo-section">
+      <div class="container-wide">
+        <h2 class="demo-section-title">4. 归档页 (Archive)</h2>
+
+        <header class="page-header" style="padding-top: 0;">
+          <h1 class="page-title">归档</h1>
+        </header>
+
+        <div class="container-article">
+          <h2 class="archive-year">2026</h2>
+          <ul class="archive-list">
+            <li><a href="#"><span class="post-title-small">博客系统统一设计实践</span><span class="archive-date">02-14</span></a></li>
+            <li><a href="#"><span class="post-title-small">零知识证明入门：从概念到代码</span><span class="archive-date">02-10</span></a></li>
+            <li><a href="#"><span class="post-title-small">动态规划的空间优化技巧</span><span class="archive-date">02-08</span></a></li>
+            <li><a href="#"><span class="post-title-small">语言的边界就是世界的边界</span><span class="archive-date">02-05</span></a></li>
+          </ul>
+
+          <h2 class="archive-year">2025</h2>
+          <ul class="archive-list">
+            <li><a href="#"><span class="post-title-small">我的 2025 年度总结</span><span class="archive-date">12-31</span></a></li>
+            <li><a href="#"><span class="post-title-small">以太坊智能合约安全最佳实践</span><span class="archive-date">11-20</span></a></li>
+            <li><a href="#"><span class="post-title-small">Codeforces 上分心得</span><span class="archive-date">10-15</span></a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Width System Demo -->
+    <section id="widths" class="demo-section">
+      <div class="container-wide">
+        <h2 class="demo-section-title">5. 多宽度容器系统</h2>
+
+        <div class="width-demo-box" style="max-width: 680px; margin-left: auto; margin-right: auto;">
+          .container-article (680px) - 文章正文、About 页面
+        </div>
+
+        <div class="width-demo-box" style="max-width: 900px; margin-left: auto; margin-right: auto;">
+          .container-medium (900px) - 项目详情、设计详情
+        </div>
+
+        <div class="width-demo-box" style="max-width: 1100px; margin-left: auto; margin-right: auto;">
+          .container-wide (1100px) - 首页、博客列表、项目列表
+        </div>
+
+        <div class="width-demo-box" style="max-width: 1400px; margin-left: auto; margin-right: auto;">
+          .container-full (1400px) - 全宽图片突破
+        </div>
+      </div>
+    </section>
+
+    <!-- Typography Demo -->
+    <section id="typography" class="demo-section" style="border-bottom: none;">
+      <div class="container-article">
+        <h2 class="demo-section-title">6. 排版系统</h2>
+
+        <h1 style="font-family: var(--font-serif); font-size: var(--text-4xl); margin-bottom: 1rem;">H1 标题 - Playfair Display</h1>
+        <h2 style="font-family: var(--font-serif); font-size: var(--text-3xl); margin-bottom: 1rem;">H2 标题 - 衬线体</h2>
+        <h3 style="font-family: var(--font-serif); font-size: var(--text-2xl); margin-bottom: 1rem;">H3 标题 - 层次清晰</h3>
+
+        <p style="font-size: var(--text-base); line-height: var(--leading-normal); margin: 1.5rem 0;">
+          正文使用 18px 基准字号，行高 1.75，确保舒适的阅读体验。我们使用 Inter 作为主要正文字体，配合系统字体回退栈。
+        </p>
+
+        <p style="font-size: var(--text-lg); color: var(--text-secondary); line-height: var(--leading-relaxed);">
+          这是大一点的辅助文字（20px），用于摘要、描述等场景。颜色使用 text-secondary，与正文形成层次。
+        </p>
+
+        <div style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-tertiary); border-radius: 8px;">
+          <code style="font-family: var(--font-mono); font-size: 0.9rem;">
+            // 代码示例<br>
+            const width = '680px'; // 最佳阅读宽度
+          </code>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer style="padding: 3rem 0; text-align: center; border-top: 1px solid var(--border);">
+    <div class="container-article">
+      <p style="color: var(--text-muted); font-size: var(--text-sm);">
+        博客系统设计测试页面 · Every.to 风格<br>
+        <span style="font-family: var(--font-mono);">Generated: 2026-02-14</span>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Detect color scheme
+    const colorSchemeDiv = document.getElementById('color-scheme');
+
+    function updateColorScheme() {
+      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      colorSchemeDiv.textContent = isDark ? 'Dark Mode 🌙' : 'Light Mode ☀️';
+    }
+
+    updateColorScheme();
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateColorScheme);
+  </script>
+</body>
+</html>
