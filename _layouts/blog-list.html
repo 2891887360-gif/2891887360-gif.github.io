@@ -16,7 +16,8 @@ layout: landing
   <!-- 文章列表 -->
   <section class="blog-list">
     <div class="container-wide">
-      {% for post in paginator.posts %}
+      {% assign posts = paginator.posts | default: site.posts %}
+      {% for post in posts %}
       <article class="blog-list-item">
         <a href="{{ post.url | relative_url }}" class="blog-list-link">
           {% if post.image %}
@@ -45,7 +46,7 @@ layout: landing
       {% endfor %}
 
       <!-- 分页 -->
-      {% if paginator.total_pages > 1 %}
+      {% if paginator.total_pages and paginator.total_pages > 1 %}
       <nav class="blog-pagination">
         {% if paginator.previous_page %}
         <a href="{{ paginator.previous_page_path | relative_url }}" class="pagination-prev">
