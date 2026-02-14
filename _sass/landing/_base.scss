@@ -52,7 +52,11 @@
   --landing-nav-height: 72px;
   --landing-section-spacing: #{$space-24};
   --landing-content-spacing: #{$space-16};
-}
+
+  // Gradients
+  --landing-gradient-hero: linear-gradient(135deg, #{$indigo-500} 0%, #{$indigo-600} 100%);
+  --landing-gradient-border: linear-gradient(90deg, #{$indigo-500}, #{$pink-500});
+  --landing-gradient-text: linear-gradient(135deg, #{$indigo-500} 0%, #{$pink-500} 100%);
 
 // Dark mode
 [data-mode="dark"] {
